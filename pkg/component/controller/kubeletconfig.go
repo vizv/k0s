@@ -270,6 +270,11 @@ func getDefaultProfile(dnsAddress string, dualStack bool) unstructuredYamlObject
 		"eventRecordQPS":       0,
 		"kubeReservedCgroup":   "{{.KubeReservedCgroup}}",
 		"kubeletCgroups":       "{{.KubeletCgroups}}",
+		"evictionHard": map[string]interface{}{
+			"memory.available": "100Mi",
+			"nodefs.available": "1Gi",
+			"imagefs.available": "1Gi",
+                },
 	}
 	if dualStack {
 		profile["featureGates"] = map[string]bool{
