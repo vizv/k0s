@@ -208,7 +208,7 @@ func (hc *Commands) isInstallable(chart *chart.Chart) bool {
 	return true
 }
 
-func (hc *Commands) InstallChart(chartName string, version string, namespace string, values map[string]interface{}) (*release.Release, error) {
+func (hc *Commands) InstallChart(releaseName string, chartName string, version string, namespace string, values map[string]interface{}) (*release.Release, error) {
 	cfg, err := hc.getActionCfg(namespace)
 	if err != nil {
 		return nil, fmt.Errorf("can't create action configuration: %v", err)
@@ -220,13 +220,18 @@ func (hc *Commands) InstallChart(chartName string, version string, namespace str
 		return nil, err
 	}
 	install.Namespace = namespace
-	install.GenerateName = true
-	name, _, err := install.NameAndChart([]string{chartName})
-	install.ReleaseName = name
+        if releaseName == "" {
+		install.GenerateName = true
+		name, _, err := install.NameAndChart([]string{chartName})
+		install.ReleaseName = name
 
-	if err != nil {
-		return nil, err
-	}
+		if err != nil {
+			return nil, err
+		}
+        } else {
+		install.ReleaseName = releaseName
+        }
+
 	loadedChart, err := loader.Load(chartDir)
 	if err != nil {
 		return nil, fmt.Errorf("can't load loadedChart `%s`: %v", chartDir, err)

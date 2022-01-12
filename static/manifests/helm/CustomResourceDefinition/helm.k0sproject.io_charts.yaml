@@ -36,6 +36,8 @@ spec:
           spec:
             description: ChartSpec defines the desired state of Chart
             properties:
+              releaseName:
+                type: string
               chartName:
                 type: string
               namespace:
